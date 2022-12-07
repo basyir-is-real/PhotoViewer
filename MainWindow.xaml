@@ -10,7 +10,50 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Button x:Name="myButton" Click="myButton_Click">Click Me</Button>
-    </StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <CommandBar Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" Grid.Row="0">
+            <AppBarButton Icon="Folder" Label="Select Folder" Click="AppBarButton_Click"/>
+            <AppBarButton Icon="Edit" Label="Edit"/>
+            <AppBarButton Icon="Share" Label="Share"/>
+        </CommandBar>
+        
+        <!-- The ItemsRepeater and ScrollViewer used: -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+        VerticalScrollMode="Auto" Grid.Row="1">
+            
+            <ScrollViewer.Resources>
+                <!-- The Layout specifications used: -->
+
+                <UniformGridLayout x:Name="UniformGridLayout" MinRowSpacing="8" MinColumnSpacing="8" ItemsJustification="SpaceEvenly"/>
+
+                <!-- The DataTemplate used: ImageTemplate-->
+
+                <DataTemplate x:Key="ImageTemplate" x:DataType="local:ImageInfo">
+                    <Image Source="{x:Bind FullName}" MaxHeight="360" MaxWidth="360" />
+                </DataTemplate>
+                <!-- The ItemsSource used is a list of custom-class Bar objects called BarItems. Bar objects have
+                    the following attributes: Height, MaxHeight, Length, MaxLength, Diameter, and MaxDiameter. -->
+            </ScrollViewer.Resources>
+            
+            <ItemsRepeater
+        ItemsSource="{x:Bind ImagesRepository.Images}"
+        Layout="{StaticResource UniformGridLayout}"
+        ItemTemplate="{StaticResource ImageTemplate}" />
+            
+        </ScrollViewer>
+
+        <InfoBar
+            x:Name ="ImageInfoBar"
+            Severity="Informational"
+            Title="Images in our gallery."
+            Grid.Row="2"
+     />
+        
+    </Grid>
 </Window>
