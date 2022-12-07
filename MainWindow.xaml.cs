@@ -34,7 +34,7 @@ namespace PhotoViewer
         public MainWindow()
         {
             this.InitializeComponent();
-            string folderPath = "C:\\Users\\Administrator.SHEERSSOLUTIONS\\source\\repos\\PhotoViewer\\Photos\\Resized";
+            string folderPath = "C:\\Users\\Administrator.SHEERSSOLUTIONS\\source\\repos\\PhotoViewer\\Photos";
             LoadImages(folderPath);
         }
 
