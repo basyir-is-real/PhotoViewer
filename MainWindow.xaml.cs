@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation and Contributors.
 // Licensed under the MIT License.
 
+using Microsoft.UI.Composition;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -14,6 +15,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -34,7 +36,8 @@ namespace PhotoViewer
         public MainWindow()
         {
             this.InitializeComponent();
-            string folderPath = "C:\\Users\\Administrator.SHEERSSOLUTIONS\\source\\repos\\PhotoViewer\\Photos";
+
+            string folderPath = "C:\\Users\\Administrator.SHEERSSOLUTIONS\\source\\repos\\PhotoViewer\\Photos\\Travel";
             LoadImages(folderPath);
         }
 
@@ -70,8 +73,57 @@ namespace PhotoViewer
             {
                 Image image = new();
                 image.Source = new BitmapImage(new Uri(imageInfo.FullName, UriKind.Relative));
+
+                Window window = new()
+                {
+                    Title = imageInfo.Name,
+                    Content = image,
+                };
+
+                SetWindowSize(window, 640, 480);
+
+                window.Activate();
+
             }
 
+        }
+
+        private static void SetWindowSize(Window window, int width, int height)
+        {
+            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(window);
+            var windowsId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hwnd);
+            var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowsId);
+
+            appWindow.Resize(new Windows.Graphics.SizeInt32(width, height));
+
+        }
+
+        private SpringVector3NaturalMotionAnimation _springAnimation;
+
+        private void OnElementPointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            CreateOrUpdateSpringAnimation(1.05f);
+            (sender as UIElement)?.StartAnimation(_springAnimation);
+        }
+
+        private void OnElementPointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            CreateOrUpdateSpringAnimation(1.0f);
+            (sender as UIElement)?.StartAnimation(_springAnimation);
+        }
+
+        private void CreateOrUpdateSpringAnimation(float finalValue)
+        {
+            if(_springAnimation is null)
+            {
+                Compositor compositor = this.Compositor;
+                if(compositor is not null)
+                {
+                    _springAnimation = compositor.CreateSpringVector3Animation();
+                    _springAnimation.Target = "Scale";
+                }
+            }
+            _springAnimation.FinalValue = new Vector3(finalValue);
         }
     }
 

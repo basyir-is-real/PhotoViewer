@@ -49,5 +49,7 @@ namespace PhotoViewer
         }
 
         private Window m_window;
+
+        public static object CurrentWindow { get; internal set; }
     }
 }

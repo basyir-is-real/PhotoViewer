@@ -35,7 +35,10 @@
                 <!-- The DataTemplate used: ImageTemplate-->
 
                 <DataTemplate x:Key="ImageTemplate" x:DataType="local:ImageInfo">
-                    <Image Source="{x:Bind FullName}" MaxHeight="360" MaxWidth="360" />
+                    <Button Click="Button_Click" DataContext="{x:Bind}" PointerEntered="OnElementPointerEntered" PointerExited="OnElementPointerExited">
+                        <Image Source="{x:Bind FullName}" MaxHeight="360" MaxWidth="360" />
+                    </Button>
+                    
                 </DataTemplate>
                 <!-- The ItemsSource used is a list of custom-class Bar objects called BarItems. Bar objects have
                     the following attributes: Height, MaxHeight, Length, MaxLength, Diameter, and MaxDiameter. -->
